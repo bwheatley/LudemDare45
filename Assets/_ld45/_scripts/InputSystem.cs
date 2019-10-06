@@ -136,6 +136,8 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
         var _player = GameManager.instance.player.GetComponent<Rigidbody2D>();
         _player.AddForce (Vector2.up * GameManager.instance.jumpHeight, ForceMode2D.Impulse);
 
+        GameManager.instance.PlayClip("flap", "Effects");
+
         PerformJump = false; //We're not jumping anymore!
     }
 
@@ -252,11 +254,33 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
         if (ctx.started && !ctx.performed) {
             //Set move started
             PerformJump = true;
+
+            if (GameManager.instance.IsDead)
+                GameManager.instance.RetryGame();
+
         }
 
         if (ctx.canceled) {
             PerformJump = false;
         }
+    }
+
+    public void OnStartGame(InputAction.CallbackContext ctx) {
+        if (ctx.started && !ctx.performed ) {
+            //Set move started
+            // PerformJump = true;
+            if (GameManager.instance.IsPaused)
+                GameManager.instance.StartGame();
+
+            if (GameManager.instance.IsDead)
+                GameManager.instance.QuitGame();
+
+        }
+
+        if (ctx.canceled) {
+            PerformJump = false;
+        }
+
     }
 
 

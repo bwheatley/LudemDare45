@@ -20,8 +20,12 @@ public class Collision : MonoBehaviour {
         // Debug.Log(string.Format("We've collided with {0}, and you have died {1}", other.transform.name, "A Vicious Death"));
 
         //If we hit the FG death!
-        if (other.transform.name == "Tilemap-FG") {
+        if (other.transform.name == "Tilemap-FG" && !GameManager.instance.IsDead) {
+            GameManager.instance.PlayClip("hit");
+
             GameManager.instance.Dead();
+            GameManager.instance.PlayClip("dead", group:"effects");
+
         }
         else {
             Debug.Log(string.Format("We've collided with {0}", other.transform.name));
@@ -35,6 +39,12 @@ public class Collision : MonoBehaviour {
         if (other.transform.GetComponent<Coin>() ) {
             GameManager.instance.CollectCoin(other.gameObject);
         }
+
+        if (other.transform.GetComponent<Door>() ) {
+            GameManager.instance.Dead(true);
+        }
+
+
     }
 
 
