@@ -63,6 +63,9 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
     //This is a test remove after you figure it out
     public GameObject player;
 
+    public bool PerformJump = false;
+
+
     #endregion
 
     private void Awake() {
@@ -117,7 +120,25 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
         if (moveStarted) {
             Move(movement);
         }
+
+        if (PerformJump) {
+            Jump();
+        }
+
     }
+
+
+    /// <summary>
+    /// Perform a jump
+    /// </summary>
+    void Jump() {
+        // Debug.Log(string.Format("Jump!"));
+        var _player = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        _player.AddForce (Vector2.up * GameManager.instance.jumpHeight, ForceMode2D.Impulse);
+
+        PerformJump = false; //We're not jumping anymore!
+    }
+
 
     public void ZoomCamera(float zoomValue)
     {
@@ -207,7 +228,8 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
 
         // Debug.Log(string.Format("{0}", ctx.ReadValueAsObject()));
         movement = ctx.ReadValue<Vector2>();
-        direction = new Vector3(movement.x, 0, movement.y);
+        // direction = new Vector3(movement.x, 0, movement.y);
+        direction = new Vector3(movement.x, 0, 0);
 
         // Debug.Log(string.Format("{0}", movement));
 
@@ -224,6 +246,17 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
         // if (ctx.performed) {
         //     Move(movement);
         // }
+    }
+
+    public void OnJump(InputAction.CallbackContext ctx) {
+        if (ctx.started && !ctx.performed) {
+            //Set move started
+            PerformJump = true;
+        }
+
+        if (ctx.canceled) {
+            PerformJump = false;
+        }
     }
 
 
@@ -299,7 +332,8 @@ public class InputSystem : MonoBehaviour, InputMaster.IPlayerActions
         var vertical   = direction.y;
 
         var scaledMoveSpeed = GameManager.instance.moveSpeed * Time.deltaTime;
-        var move = transform.TransformDirection(horizontal, vertical, 0);
+        // var move = transform.TransformDirection(horizontal, vertical, 0);
+        var move = transform.TransformDirection(horizontal, 0, 0);
 
         //Move the player just for giggles
         position.x += horizontal;

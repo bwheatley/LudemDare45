@@ -24,6 +24,14 @@ public class InputMaster : IInputActionCollection
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9c83300-df46-44dd-b22e-18fdd8753d9f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -84,7 +92,7 @@ public class InputMaster : IInputActionCollection
                 },
                 {
                     ""name"": ""GamePad"",
-                    ""id"": ""6ab54a0a-7902-4a99-9432-538b777d7c6e"",
+                    ""id"": ""b97c33f2-37f9-44e8-a6f8-3d07bb2fb3f2"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -94,8 +102,8 @@ public class InputMaster : IInputActionCollection
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""26a8d914-97d3-4837-b7b6-5ce5e9719b10"",
+                    ""name"": ""Up"",
+                    ""id"": ""ff187ca3-3ac0-4b82-a8ea-245278af7169"",
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -105,8 +113,8 @@ public class InputMaster : IInputActionCollection
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""down"",
-                    ""id"": ""ca1b9c74-d2ca-4e3a-9e4a-f82ca291733c"",
+                    ""name"": ""Down"",
+                    ""id"": ""f38a0cf6-93f3-4346-9489-fe32b1561793"",
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -116,8 +124,8 @@ public class InputMaster : IInputActionCollection
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""bfc56ca7-9fdd-49bb-8262-05219fec1ea0"",
+                    ""name"": ""Left"",
+                    ""id"": ""7633623e-a499-42b3-8cb2-07d5b7bc799c"",
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -127,8 +135,8 @@ public class InputMaster : IInputActionCollection
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
-                    ""id"": ""e230a378-d4ae-4f68-90c3-6c7117c5ff26"",
+                    ""name"": ""Right"",
+                    ""id"": ""964af4db-876d-4220-a0fa-01c9d1b5f9d5"",
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -136,6 +144,39 @@ public class InputMaster : IInputActionCollection
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68174808-bbed-4541-80b7-2d62dc4641c0"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""faeba65e-943f-4abc-a936-3b87d1cdd4a4"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4de59792-ffd2-471e-a8f0-a3eb2070d125"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -173,6 +214,7 @@ public class InputMaster : IInputActionCollection
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~InputMaster()
@@ -223,11 +265,13 @@ public class InputMaster : IInputActionCollection
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_Jump;
     public struct PlayerActions
     {
         private InputMaster m_Wrapper;
         public PlayerActions(InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -240,6 +284,9 @@ public class InputMaster : IInputActionCollection
                 Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -247,6 +294,9 @@ public class InputMaster : IInputActionCollection
                 Movement.started += instance.OnMovement;
                 Movement.performed += instance.OnMovement;
                 Movement.canceled += instance.OnMovement;
+                Jump.started += instance.OnJump;
+                Jump.performed += instance.OnJump;
+                Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -272,5 +322,6 @@ public class InputMaster : IInputActionCollection
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }

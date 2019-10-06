@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
 
@@ -12,6 +15,16 @@ public class GameManager : MonoBehaviour {
     public float defaultCameraSize = 34.2f;
 
     public GameObject player;
+    public float jumpHeight = 1.0f;
+    public bool OnGround = true;
+    public string[] Deathmessage;
+
+    public int CoinsCollected = 0;
+    public GameObject CoinCountUI;
+
+    public GameObject GameOverUI;
+    public GameObject GameOver_CoinsUI;
+    public GameObject GameOver_MessageUI;
 
 
     private void Awake() {
@@ -67,6 +80,33 @@ public class GameManager : MonoBehaviour {
 
     /// <summary>
 
+    public void Dead() {
+        GameOver_MessageUI.GetComponent<TextMeshProUGUI>().text = string.Format("You have {0} and died", RandomDeath());
+        GameOver_CoinsUI.GetComponent<TextMeshProUGUI>().text = string.Format("{0:N0}", CoinsCollected);
+        // UnityEditor.EditorApplication.isPlaying = false;
+
+        GameOverUI.SetActive(!GameOverUI.activeSelf);
+
+
+
+    }
+
+
+    public string RandomDeath() {
+        return Deathmessage[Random.Range(0, Deathmessage.Length)];
+    }
+
+
+    public void CollectCoin(GameObject coin) {
+        CoinsCollected++;
+        IncrementCoin();
+        Debug.Log(string.Format("Coin Collected we have {0} coins now!", CoinsCollected));
+        Destroy(coin);
+    }
+
+    public void IncrementCoin() {
+        CoinCountUI.GetComponent<TextMeshProUGUI>().text = string.Format("{0:N0}", CoinsCollected);
+    }
 
 
 }
