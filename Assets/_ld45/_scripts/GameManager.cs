@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour {
     public AudioClip FlapEffect;
     public GameObject masterEffectSource;
     public GameObject masterSoundsSource;
+    public GameObject GameMusic;
 
 
     public void PlayClip(string soundToPlay, string group = "Sounds") {
