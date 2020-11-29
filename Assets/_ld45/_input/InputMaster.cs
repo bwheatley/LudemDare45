@@ -1,14 +1,15 @@
 // GENERATED AUTOMATICALLY FROM 'Assets/_ld45/_input/InputMaster.inputactions'
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class InputMaster : IInputActionCollection
+public class @InputMaster : IInputActionCollection, IDisposable
 {
-    private InputActionAsset asset;
-    public InputMaster()
+    public InputActionAsset asset { get; }
+    public @InputMaster()
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputMaster"",
@@ -237,7 +238,7 @@ public class InputMaster : IInputActionCollection
         m_Player_StartGame = m_Player.FindAction("StartGame", throwIfNotFound: true);
     }
 
-    ~InputMaster()
+    public void Dispose()
     {
         UnityEngine.Object.Destroy(asset);
     }
@@ -289,8 +290,8 @@ public class InputMaster : IInputActionCollection
     private readonly InputAction m_Player_StartGame;
     public struct PlayerActions
     {
-        private InputMaster m_Wrapper;
-        public PlayerActions(InputMaster wrapper) { m_Wrapper = wrapper; }
+        private @InputMaster m_Wrapper;
+        public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @StartGame => m_Wrapper.m_Player_StartGame;
@@ -303,28 +304,28 @@ public class InputMaster : IInputActionCollection
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                StartGame.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
-                StartGame.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
-                StartGame.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
+                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @StartGame.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
+                @StartGame.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
+                @StartGame.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartGame;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                Movement.started += instance.OnMovement;
-                Movement.performed += instance.OnMovement;
-                Movement.canceled += instance.OnMovement;
-                Jump.started += instance.OnJump;
-                Jump.performed += instance.OnJump;
-                Jump.canceled += instance.OnJump;
-                StartGame.started += instance.OnStartGame;
-                StartGame.performed += instance.OnStartGame;
-                StartGame.canceled += instance.OnStartGame;
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @StartGame.started += instance.OnStartGame;
+                @StartGame.performed += instance.OnStartGame;
+                @StartGame.canceled += instance.OnStartGame;
             }
         }
     }
